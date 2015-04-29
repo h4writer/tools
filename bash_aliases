@@ -1,5 +1,5 @@
 #
-# To install: ln -s bash_aliases ~/.bash_aliases
+# To install: ln -s $(pwd)/bash_aliases ~/.bash_aliases
 #
 
 BUILD=$HOME"/"Build 
