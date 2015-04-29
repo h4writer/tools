@@ -1,0 +1,3 @@
+mk_add_options MOZ_MAKE_FLAGS="-j4"
+ac_add_options --enable-optimize --disable-debug
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-fast
