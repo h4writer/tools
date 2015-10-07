@@ -9,7 +9,9 @@ alias alias_reload='source $HOME/.bash_aliases'
 
 # Notify something is done.
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-alias notify='echo "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*notify$//'\'')" > /tmp/alert'
+alias notify='echo "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*notify$//'\'')" >> /tmp/alert'
+#TODO; put token in config file!
+alias notify='curl --data "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*notify$//'\'')" $"https://uwsoftware.slack.com/services/hooks/slackbot?token=XXXXXXXXXXXXX&channel=%23h4writer-compiler"'
 
 # Engines
 alias js='$JS/dist/bin/js'
@@ -33,7 +35,7 @@ alias inbound='cd '$REPO'/js/src'
 alias inbound32='        export JS="'$REPO'/js/src/build-32";                   export MOZCONFIG=mozconfig-fast;'
 alias inbound32d='       export JS="'$REPO'/js/src/build-32-debug";             export MOZCONFIG=mozconfig-debug;'
 alias inbound32p='       export JS="'$REPO'/js/src/build-32-parallel";          export MOZCONFIG=mozconfig-fast;'
-alias inbound32do='      export JS="'$REPO'/js/src/build-32-debug-opt";         export MOZCONFIG=none;'
+alias inbound32do='      export JS="'$REPO'/js/src/build-32-debug-opt";         export MOZCONFIG=mozconfig-debug;'
 alias inbound64='        export JS="'$REPO'/js/src/build-64";                   export MOZCONFIG=none;'
 alias inbound64d='       export JS="'$REPO'/js/src/build-64-debug";             export MOZCONFIG=none;'
 alias inbound64p='       export JS="'$REPO'/js/src/build-64-parallel";          export MOZCONFIG=none;'
@@ -59,7 +61,7 @@ NSPR32='--enable-threadsafe --with-nspr-cflags="-I'$NSPRPUB32'/include/nspr" --w
 NSPR64='--enable-threadsafe --with-nspr-cflags="-I'$NSPRPUB64'/include/nspr" --with-nspr-libs="'$NSPRPUB64'/lib/libnspr4.a '$NSPRPUB64'/lib/libplc4.a '$NSPRPUB64'/lib/libplds4.a"'
 NSPRBOOK='--enable-threadsafe --with-nspr-cflags="-I'$NSPRPUBBOOK'/include/nspr" --with-nspr-libs="'$NSPRPUBBOOK'/lib/libnspr4.a '$NSPRPUBBOOK'/lib/libplc4.a '$NSPRPUBBOOK'/lib/libplds4.a"'
 GGC='--enable-exact-rooting --enable-gcgenerational'
-EXTRA='--disable-intl-api --without-intl-api -Werror'
+EXTRA='--disable-intl-api --without-intl-api'
 NSPR32='--enable-build-nspr'
 
 alias conf32='     cd $JS; '$BUILD32CC' ../configure '$BUILD32'           --disable-debug --enable-optimize  '$EXTRA
@@ -86,10 +88,10 @@ alias confSoftBook='cd $JS; ../configure --disable-debug --enable-optimize --tar
 alias confSoftBookd='cd $JS; CC="gcc -mfloat-abi=softfp" CXX="g++ -mfloat-abi=softfp" ../configure --enable-debug --disable-optimize --target=arm-linux-gnueabi --with-arch=armv7-a --with-thumb --disable-intl-api'
 alias confARMd='cd $JS; ../configure --enable-debug --disable-optimize --target=arm-linux-gnueabi --with-arch=armv7-a --with-thumb --with-qemu-exe=/usr/bin/qemu-arm --with-cross-lib=/usr/arm-linux-gnueabi/lib --disable-intl-api'
 
-alias confArmSim='     cd $JS; ../configure           --enable-arm-simulator --disable-debug --enable-optimize '$EXTRA
-alias confArmSimd='    cd $JS; ../configure '$NSPR32' --enable-arm-simulator --enable-debug --disable-optimize '$EXTRA
-alias confArmSimp='    cd $JS; ../configure '$NSPR32' --enable-arm-simulator --disable-debug --enable-optimize '$EXTRA
-alias confArmSimdo='   cd $JS; ../configure '$NSPR32' --enable-arm-simulator --enable-debug --enable-optimize '$EXTRA
+alias confArmSim='     cd $JS; ../configure           --enable-simulator=arm --disable-debug --enable-optimize '$EXTRA
+alias confArmSimd='    cd $JS; ../configure '$NSPR32' --enable-simulator=arm --enable-debug --disable-optimize '$EXTRA
+alias confArmSimp='    cd $JS; ../configure '$NSPR32' --enable-simulator=arm --disable-debug --enable-optimize '$EXTRA
+alias confArmSimdo='   cd $JS; ../configure '$NSPR32' --enable-simulator=arm --enable-debug --enable-optimize '$EXTRA
 
 
 alias s='~/Build/stackato'
