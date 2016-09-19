@@ -23,18 +23,18 @@ class WorkerThread(threading.Thread):
     def stop(self):
         self.stop_ = True
     def run(self):
-        tail_line = ""
+        tail_line = 0
 
         while not self.stop_:
             time.sleep(2)
             # Tail Files
             if os.path.exists(alert_file):
                 f = open(alert_file, 'r')
-                line = f.readlines()[-1]
+                lines = f.readlines()
                 f.close()
-                if tail_line != line:
-                    tail_line = line
-                    irc.send("PRIVMSG %s :h4writer: %s" % (channel, line))
+                if tail_line != len(lines):
+                    tail_line = len(lines)
+                    irc.send("PRIVMSG %s :h4writer: %s" % (channel, lines[-1]))
 
 if __name__ == '__main__':
     worker = WorkerThread()
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     try:
         while True:
             data = irc.recv ( 4096 )
-            print data
+            #print data
 
             if data.find ( 'Welcome to the Mozilla IRC Network' ) != -1:
                 irc.send ( 'JOIN ' + channel + '\r\n' )
