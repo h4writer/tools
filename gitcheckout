@@ -1,0 +1,73 @@
+#git commit -m "CURRENTLY ADDED CHANGES"
+#git add .
+#git commit -m "CURRENT ALTERATIONS"
+#git branch blaat
+#git reset HEAD~   ; undo current alterations
+#git reset --soft HEAD~  ; undo 
+
+###########################################
+if [ $# -eq 0 ]; then
+    echo "No arguments supplied"
+    exit;
+fi
+
+branchName=$1
+echo "Switching to branch '$branchName'"
+echo ""
+
+############################################
+
+if ! git status | grep -q -E "nothing (added )*to commit"; then
+    echo "git commit -m 'CURRENTLY ADDED CHANGES'"
+    git commit -m "CURRENTLY ADDED CHANGES";
+
+    retVal=$?
+    if [ $retVal -ne 0 ]; then
+        echo "Couldn't add commit"
+        exit;
+    fi
+fi
+
+#############################################
+echo "git add ."
+git add .
+if ! git status | grep -q -E "nothing (added )*to commit"; then
+    echo "git commit -m 'CURRENT ALTERATIONS'"
+    git commit -m "CURRENT ALTERATIONS"
+
+    retVal=$?
+    if [ $retVal -ne 0 ]; then
+        if ! git log -1 | grep -q "CURRENTLY ADDED CHANGES"; then
+            echo "git reset --soft HEAD~"
+            git reset --soft HEAD~
+        fi
+        echo "Couldn't add commit"
+        exit;
+    fi
+fi
+
+#############################################
+echo "git checkout $branchName"
+git checkout $branchName
+
+retVal=$?
+if [ $retVal -ne 0 ]; then
+    echo ""
+    echo "Couldn't branch into '$branchName'"
+    echo ""
+    # keep going
+fi
+
+#############################################
+
+if git log -1 | grep -q "CURRENT ALTERATIONS"; then
+    echo "git reset HEAD~"
+    git reset HEAD~
+fi
+
+#############################################
+
+if git log -1 | grep -q "CURRENTLY ADDED CHANGES"; then
+    echo "git reset --soft HEAD~"
+    git reset --soft HEAD~
+fi
