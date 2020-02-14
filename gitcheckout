@@ -11,13 +11,20 @@ if [ $# -eq 0 ]; then
     exit;
 fi
 
+if [ -d .git ]; then
+    pass;
+else
+    echo "Not in the top level git directory"
+    exit;
+fi;
+
 branchName=$1
 echo "Switching to branch '$branchName'"
 echo ""
 
 ############################################
 
-if ! git status | grep -q -E "nothing (added )*to commit"; then
+if ! git status | grep -q -E "no changes (added )*to commit"; then
     echo "git commit -m 'CURRENTLY ADDED CHANGES'"
     git commit -m "CURRENTLY ADDED CHANGES";
 
@@ -31,7 +38,7 @@ fi
 #############################################
 echo "git add ."
 git add .
-if ! git status | grep -q -E "nothing (added )*to commit"; then
+if ! git status | grep -q -E "no changes (added )*to commit"; then
     echo "git commit -m 'CURRENT ALTERATIONS'"
     git commit -m "CURRENT ALTERATIONS"
 
